@@ -41,9 +41,9 @@ seqtk sample "$PREreadPair_2" 600000 | gzip > "$readPair_2"
 #echo "$PREreadPair_1 | $fastq1_name | $readPair_1"
 
 ###Call MLST###
-srst2 --samtools_args "\-A" --mlst_delimiter '_' --input_pe "$readPair_1" "$readPair_2" --output "$out_nameMLST" --save_scores --mlst_db "$allDB_dir/Streptococcus_pneumoniae.fasta" --mlst_definitions "$allDB_dir/spneumoniae.txt" --min_coverage 99.999
+#srst2 --samtools_args "\-A" --mlst_delimiter '_' --input_pe "$readPair_1" "$readPair_2" --output "$out_nameMLST" --save_scores --mlst_db "$allDB_dir/Streptococcus_pneumoniae.fasta" --mlst_definitions "$allDB_dir/spneumoniae.txt" --min_coverage 99.999
 ###Check and extract new MLST alleles###
-MLST_allele_checkr.pl "$out_nameMLST"__mlst__Streptococcus_pneumoniae__results.txt "$out_nameMLST"__*.Streptococcus_pneumoniae.sorted.bam "$allDB_dir/Streptococcus_pneumoniae.fasta"
+#MLST_allele_checkr.pl "$out_nameMLST"__mlst__Streptococcus_pneumoniae__results.txt "$out_nameMLST"__*.Streptococcus_pneumoniae.sorted.bam "$allDB_dir/Streptococcus_pneumoniae.fasta"
 
 ###Call SPN Serotype###
 SPN_serotyper.sh -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/seroT_Gene-DB_Final.fasta" -n "$out_nameSERO"
@@ -55,13 +55,13 @@ SPN_PBP-Gene_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/MOD_bLact
 SPN_miscRes_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir" -m miscDrug_Gene-DB_Final.fasta -v vanDrug_Gene-DB_Final.fasta -n "$out_nameMISC"
 
 ###Type ARG-ANNOT Resistance Genes###
-srst2 --samtools_args '\\-A' --input_pe "$readPair_1" "$readPair_2" --output "$out_nameARG" --log --save_scores --min_coverage 70 --max_divergence 30 --gene_db "$allDB_dir/ARGannot_r1.fasta"
+#srst2 --samtools_args '\\-A' --input_pe "$readPair_1" "$readPair_2" --output "$out_nameARG" --log --save_scores --min_coverage 70 --max_divergence 30 --gene_db "$allDB_dir/ARGannot_r1.fasta"
 
 ###Type ResFinder Resistance Gene###
-srst2 --samtools_args '\\-A' --input_pe "$readPair_1" "$readPair_2" --output "$out_nameRES" --log --save_scores --min_coverage 70 --max_divergence 30 --gene_db "$allDB_dir/ResFinder.fasta"
+#srst2 --samtools_args '\\-A' --input_pe "$readPair_1" "$readPair_2" --output "$out_nameRES" --log --save_scores --min_coverage 70 --max_divergence 30 --gene_db "$allDB_dir/ResFinder.fasta"
 
 ###Type PlasmidFinder Resistance Gene###
-srst2 --samtools_args '\\-A' --input_pe "$readPair_1" "$readPair_2" --output "$out_namePLAS" --log --save_scores --min_coverage 70 --max_divergence 30 --gene_db "$allDB_dir/PlasmidFinder.fasta"
+#srst2 --samtools_args '\\-A' --input_pe "$readPair_1" "$readPair_2" --output "$out_namePLAS" --log --save_scores --min_coverage 70 --max_divergence 30 --gene_db "$allDB_dir/PlasmidFinder.fasta"
 
 #Add in perl script to find contamination threshold here
 contamination_level=10
@@ -134,6 +134,7 @@ else
 fi
 printf "\t" >> "$tabl_out"
 
+: <<EOF
 ###MLST OUTPUT###
 printf "\tMLST:\n" >> "$sampl_out"
 count=0
@@ -149,6 +150,7 @@ do
         printf "$MLST_tabl\t" >> "$tabl_out"
     fi
 done < "$out_nameMLST"__mlst__Streptococcus_pneumoniae__results.txt
+EOF
 
 ###PBP_ID OUTPUT###
 printf "\tPBP_ID Code:\n" >> "$sampl_out"
@@ -293,6 +295,7 @@ printf "\t" >> "$tabl_out"
 #fi
 #printf "\t" >> "$tabl_out"
 
+: <<EOF
 ###ARG-ANNOT and ResFinder Resistance Gene Typing Output###
 printf "\tGeneral Resistance Targets:\n\t\tDB_Target\tMatch_Type\tDepth\n" >> "$sampl_out"
 genRes_target=()
@@ -395,5 +398,6 @@ else
     printf '%s\n' "${plas_target[@]}" | sort | tr '\n' ';' | sed 's/;$//g'
     printf '%s\n' "${plas_target[@]}" | sort | tr '\n' ';' | sed 's/;$//g' >> "$tabl_out"
 fi
+EOF
 printf "\n\n" >> "$sampl_out"
 printf "\n" >> "$tabl_out"
