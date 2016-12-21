@@ -46,7 +46,7 @@ seqtk sample "$PREreadPair_2" 600000 | gzip > "$readPair_2"
 #MLST_allele_checkr.pl "$out_nameMLST"__mlst__Streptococcus_pneumoniae__results.txt "$out_nameMLST"__*.Streptococcus_pneumoniae.sorted.bam "$allDB_dir/Streptococcus_pneumoniae.fasta"
 
 ###Call SPN Serotype###
-SPN_serotyper.sh -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/seroT_Gene-DB_Final.fasta" -n "$out_nameSERO"
+#SPN_serotyper.sh -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/seroT_Gene-DB_Final.fasta" -n "$out_nameSERO"
 
 ###Call SPN bLactam Resistances###
 SPN_PBP-Gene_Typer.pl -1 "$readPair_1" -2 "$readPair_2" -r "$allDB_dir/MOD_bLactam_resistance.fasta" -n "$out_namePBP"
@@ -77,7 +77,7 @@ sampl_out="SAMPLE_Isolate__Typing_Results.txt"
 
 printf "$just_name\n" >> "$sampl_out"
 printf "$just_name\t" >> "$tabl_out"
-#: <<EOF
+: <<EOF
 ###SEROTYPE OUTPUT###
 printf "\tSerotype:\n" >> "$sampl_out"
 lineNum=$(cat TEMP_SeroType_Results.txt | wc -l)
@@ -133,6 +133,7 @@ else
     fi
 fi
 printf "\t" >> "$tabl_out"
+EOF
 
 : <<EOF
 ###MLST OUTPUT###

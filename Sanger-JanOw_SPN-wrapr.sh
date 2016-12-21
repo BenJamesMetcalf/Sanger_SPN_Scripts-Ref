@@ -149,7 +149,7 @@ done
 ###Output the emm type/MLST/drug resistance data for this sample to it's results output file###
 batch_name=$(head -n1 $out_jobCntrl/job-control.txt | awk -F" " '{print $5}' | awk -F"/" '{print $(NF-2)}')
 #printf "Sample\tSerotype\tST\taroe\tgdh_\tgki_\trecP\tspi_\txpt_\tddl_\tPBP_Code(1A:2B:2X)\tMisc_Resistance\tGen_Resistance\tPlasmid_Target\n" >> "$out_analysis"/TABLE_SPN_"$batch_name"_Typing_Results.txt
-printf "Sample\tSerotype\tPBP_Code(1A:2B:2X)\tMisc_Resistance\n" >> "$out_analysis"/TABLE_SPN_"$batch_name"_Typing_Results.txt
+printf "Sample\tPBP_Code(1A:2B:2X)\tMisc_Resistance\n" >> "$out_analysis"/TABLE_SPN_"$batch_name"_Typing_Results.txt
 while read -r line
 do
     batch_name=$(echo $line | awk -F" " '{print $5}' | awk -F"/" '{print $(NF-2)}')
