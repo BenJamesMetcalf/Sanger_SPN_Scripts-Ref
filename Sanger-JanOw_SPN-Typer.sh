@@ -402,3 +402,10 @@ fi
 EOF
 printf "\n\n" >> "$sampl_out"
 printf "\n" >> "$tabl_out"
+
+rm *.fastq.gz
+rm cutadapt_*.fastq
+rm *.sam
+rm *.bam
+rm *.pileup
+
